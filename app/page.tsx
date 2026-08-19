@@ -23,18 +23,18 @@ export default function Home() {
   return (
    
     <div className="bg-gray-50 min-h-screen">
-      <Navbar /> {/* Navbar typically has its own styling */}
+      <Navbar /> 
 
-      <main> {/* Use <main> for semantic content */}
-        {/* Each section component should ideally manage its own internal padding */}
+      <main> 
+  
         <HeroSection />
 
-        {/* Adding margin between sections for visual separation */}
-        <div className="mt-16"> {/* Adjust this margin as needed */}
+    
+        <div className="mt-16"> 
           <Pengguna />
         </div>
 
-        <div className="mt-16 px-1"> {/* Adjust this margin as needed */}
+        <div className="mt-16 px-1">
           <SejarahKami />
         </div>
 
@@ -42,7 +42,7 @@ export default function Home() {
           <ProductCards />
         </div> */}
 
-        <div className="mt-16 px-10"> {/* Adjust this margin as needed */}
+        <div className="mt-16 px-10">
           <SokidList />
         </div>
       </main>
