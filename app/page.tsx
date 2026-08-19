@@ -1,0 +1,53 @@
+"use client"
+import Footer from "@/components/footer";
+import HeroSection from "@/components/hero";
+import { SokidList } from "@/components/kemitraan"; // Assuming this is correct
+import Navbar from "@/components/navbar";
+import Pengguna from "@/components/pengguna";
+
+import SejarahKami from "@/components/sejarahKami";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function Home() {
+  const router = useRouter()
+  const { user, isLoading } = useAuth();
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.replace("/dashboard");
+    }
+  }, [user, isLoading]);
+
+
+  return (
+   
+    <div className="bg-gray-50 min-h-screen">
+      <Navbar /> {/* Navbar typically has its own styling */}
+
+      <main> {/* Use <main> for semantic content */}
+        {/* Each section component should ideally manage its own internal padding */}
+        <HeroSection />
+
+        {/* Adding margin between sections for visual separation */}
+        <div className="mt-16"> {/* Adjust this margin as needed */}
+          <Pengguna />
+        </div>
+
+        <div className="mt-16 px-1"> {/* Adjust this margin as needed */}
+          <SejarahKami />
+        </div>
+
+        {/* <div className="mt-16 px-5 border-red-400"> 
+          <ProductCards />
+        </div> */}
+
+        <div className="mt-16 px-10"> {/* Adjust this margin as needed */}
+          <SokidList />
+        </div>
+      </main>
+
+      <Footer /> {/* Footer also typically has its own styling */}
+    </div>
+  );
+}
