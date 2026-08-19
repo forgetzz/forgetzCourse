@@ -5,7 +5,11 @@ import { getFirestore } from "firebase-admin/firestore";
 const projectId = process.env.FIREBASE_PROJECT_ID;
 const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
 const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-
+console.log({
+  rawStart: privateKey?.slice(0, 30),
+  parsedStart: privateKey?.slice(0, 30),
+  parsedEnd: privateKey?.slice(-30),
+});
 
 const firebaseAdmin: App =
   getApps().length > 0
