@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase-admin";
 
@@ -14,10 +15,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifikasi ID Token Firebase
+
     await adminAuth.verifyIdToken(idToken);
 
-    // Buat session cookie
+
     const sessionCookie = await adminAuth.createSessionCookie(
       idToken,
       {

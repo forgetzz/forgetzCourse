@@ -80,11 +80,9 @@ const handleLogin = async () => {
       password
     );
 
-    // 4. Ambil Firebase ID Token
     const idToken = await credential.user.getIdToken();
 
-    // 5. Kirim ID Token ke server
-    // Server akan mengubahnya menjadi session cookie
+console.log(idToken)
     const sessionRes = await fetch("/api/session", {
       method: "POST",
       headers: {
