@@ -88,22 +88,22 @@ export default function HtmlModule() {
         getData();
     }, []);
 
- if (profileLoading || moduleLoading) {
-    return (
-        <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+    if (profileLoading || moduleLoading) {
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
 
-            <div className="text-center">
-                <h1 className="text-lg font-semibold tracking-tight">
-                    Loading data
-                </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                    Please wait a moment...
-                </p>
+                <div className="text-center">
+                    <h1 className="text-lg font-semibold tracking-tight">
+                        Loading data
+                    </h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        Please wait a moment...
+                    </p>
+                </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
     return (
         <>
             {(profile?.levelAccount ?? 0) > 0 ? (
@@ -114,9 +114,22 @@ export default function HtmlModule() {
                     videoLoading={moduleLoading}
                 />
             ) : (
-                <h1 className="flex min-h-screen items-center justify-center text-4xl">
-                    AKUN ANDA BELUM MEMILIKI AKSES
-                </h1>
+                <div className="flex min-h-screen items-center justify-center bg-background px-6">
+                    <div className="w-full max-w-lg rounded-2xl border border-border bg-card/60 p-10 text-center shadow-xl backdrop-blur-xl">
+                        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-red-500">
+                            <span className="text-2xl">!</span>
+                        </div>
+
+                        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                            AKUN ANDA BELUM MEMILIKI AKSES
+                        </h1>
+
+                        <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                            Anda belum memiliki izin untuk mengakses halaman ini.
+                            Hubungi administrator untuk mendapatkan akses.
+                        </p>
+                    </div>
+                </div>
             )}
         </>
     );

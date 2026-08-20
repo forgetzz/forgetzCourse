@@ -20,12 +20,15 @@ import {
 
 
 import { useTabStore } from "@/store/tabStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TabKey } from "@/constants/Tabkey";
 import { tabStrategies } from "@/constants/Tabkey";
 import { useAuth } from "@/hooks/useAuth";
 import { formatTanggalIndonesia } from "@/utils/date";
 import { FaAlignCenter, FaAlignJustify, FaBookReader, FaCashRegister, FaFolderMinus, FaHome, FaMoneyBill, FaMoneyBillWave, FaMoneyCheck, FaPaypal, FaQrcode, FaUserCircle } from "react-icons/fa";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { profileType } from "@/types";
 
 export default function BottomNav() {
   const { activeTab, setActiveTab } = useTabStore();
@@ -35,6 +38,8 @@ export default function BottomNav() {
   const [openNested3, setOpenNested3] = useState(false)
   const [openNested4, setOpenNested4] = useState(false)
   const { user, isLoading } = useAuth()
+  const [profile , setProfile] = useState<profileType>() 
+
   const now = new Date();
 
 
@@ -42,11 +47,40 @@ export default function BottomNav() {
     return tabStrategies[activeTab];
 
   };
+   
+useEffect(() => {
+    if (isLoading) return;
+
+    if (!user) {
+        alert("Login dulu");
+        return;
+    }
+
+    const getProfile = async () => {
+        try {
+            const snap = await getDoc(
+                doc(db, "users", user.uid)
+            );
+
+            if (!snap.exists()) {
+                alert("Data anda belum ada.");
+                return;
+            }
+
+            setProfile(snap.data() as profileType);
+        } catch (error) {
+            console.error("Kesalahan pada data anda:", error);
+        }
+    };
+
+    getProfile();
+}, [user, isLoading]);
+
 
   const navItems = [
     { key: "Payment", icon: <FaMoneyBillWave size={22} /> },
     { key: "home", icon: <div className="bg-green-500 p-2 text-white rounded-full"><FaHome size={22} /></div> },
-    { key: "Module", icon: <FaBookReader size={22} /> },
+    { key: "Html", icon: <FaBookReader size={22} /> },
     { key: "settings", icon: <FaUserCircle size={22} /> },
   ] as const;
 
@@ -56,8 +90,8 @@ export default function BottomNav() {
         {/* Kiri: Hari + Halo */}
         <div>
           <p className="text-xs capitalize opacity-90">{formatTanggalIndonesia(now)}</p>
-          {user ? (
-            <h1 className=" font-semibold">{user?.name}</h1>
+          {profile ? (
+            <h1 className=" font-semibold">{profile.name}</h1>
           ) : (
             <p>loading...</p>
           )}
@@ -142,7 +176,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                   Css
@@ -150,7 +184,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Javascipt
@@ -158,7 +192,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                    Solidity
@@ -201,7 +235,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                       setOpen(false);
                     }}
                   >
@@ -210,7 +244,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                   React + Vite
@@ -218,7 +252,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Sveltekit
@@ -226,7 +260,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Vue
@@ -234,7 +268,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Nuxtjs
@@ -269,7 +303,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                       setOpen(false);
                     }}
                   >
@@ -278,7 +312,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                   Kotlin
@@ -286,7 +320,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Flutter
@@ -320,7 +354,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                       setOpen(false);
                     }}
                   >
@@ -329,7 +363,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                   React + Vite
@@ -337,7 +371,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Sveltekit
@@ -345,7 +379,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Vue
@@ -353,7 +387,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     Nuxtjs
@@ -361,7 +395,7 @@ export default function BottomNav() {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Module");
+                      setActiveTab("Html");
                     }}
                   >
                     NextAuth
@@ -377,7 +411,7 @@ export default function BottomNav() {
         </SheetContent>
 
 
-        <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-lg px-8 py-4 flex justify-between gap-8 w-[100%] max-w-md z-50">
+        <nav className="fixed bottom-1 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-lg px-8 py-4  flex justify-between gap-8 w-[100%] max-w-md z-50">
 
           <button
             onClick={() => setOpen(true)}

@@ -11,9 +11,26 @@ import Payment from "@/components/userComponents/Payment";
 export const tabStrategies = {
   home: <Home2 />,
   settings: <ProfilePage />,
-  Module: <HtmlModule/>,
-  Html: <HtmlModule/>,
-  Payment: <Payment/> 
+  Payment: <Payment />,
+
+  // LANGUAGE
+  Html: <HtmlModule />,
+
+
+  // FRAMEWORK
+  nextJs: <h1>SOON</h1>,
+
+  // AI PAGE
+  aiService: <h1> SOON</h1>,
+
+  //  TOOLS
+  npm: <h1>SOON</h1>,
+
+  // WEB3 
+
+  web3: <h1>SOON</h1>
+
+
 } as const;
 
 

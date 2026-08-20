@@ -12,6 +12,12 @@ export const pdfJs = defineType({
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
+       defineField({
+          name: 'level',
+          title: 'Level',
+          type: 'number',
+          validation: (Rule) => Rule.required().min(1)
+        }),
 
     defineField({
       name: "description",

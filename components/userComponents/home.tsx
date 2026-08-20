@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Star, TrendingUp, Layers, Award, ChevronRight, Code2 } from "lucide-react";
+import { Star, TrendingUp, Code2 } from "lucide-react";
 import useTheme from "@/hooks/useTheme";
 import { Colors } from "@/utils/Colors";
 import { profileType } from "@/types";
@@ -47,6 +46,7 @@ useEffect(() => {
 
     getProfile();
 }, [user, isLoading]);
+
   const levelAccount = Number(profile?.levelAccount ?? 0);
 
   return (
@@ -173,7 +173,7 @@ function TaskCard({
           </div>
           <span className="text-xs text-gray-600 font-medium px-2 py-1 rounded-full"
             style={{ background: "rgba(255,255,255,0.05)" }}>
-            {filled}/{max} selesai
+            {filled}/{max} Level Account
           </span>
         </div>
 

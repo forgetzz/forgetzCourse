@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./global.css";
-import GlobalLoading from "@/components/loadingPage";
+import GlobalLoading from "@/components/landing/loadingPage";
 import { AuthContextProvider } from "@/context/authContext";
 import { ThemeContextProvider } from "@/context/ThemeContext";
 
@@ -33,7 +33,7 @@ export default function RootLayout({
       <head>
         {/* Favicon manual */}
         <link rel="icon" href="/images/loading.png" type="image/png" />
-        <title>Quantum Bootcamp</title>
+        <title>ForgetzStudio</title>
       </head>
 
       <body className="bg-base-100 text-base-content min-h-screen">

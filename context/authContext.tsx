@@ -4,6 +4,7 @@ import { AuthType, AuthTypeProvider } from "@/types/AuthContextType";
 import { User } from "@/types/User";
 import React, {
     createContext,
+    useCallback,
     useEffect,
     useState,
 } from "react";
@@ -17,58 +18,40 @@ export function AuthContextProvider({
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        let mounted = true;
+    const checkSession = useCallback(async () => {
+        try {
+            const response = await fetch("/api/me", {
+                method: "GET",
+                credentials: "include",
+                cache: "no-store",
+            });
 
-        const checkSession = async () => {
-            try {
-                const response = await fetch("/api/me", {
-                    method: "GET",
-                    credentials: "include",
-                    cache: "no-store",
-                });
-
-                if (!response.ok) {
-                    if (mounted) {
-                        setUser(null);
-                    }
-
-                    return;
-                }
-
-                const data = await response.json();
-
-                if (mounted) {
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.error(
-                    "Auth session error:",
-                    error
-                );
-
-                if (mounted) {
-                    setUser(null);
-                }
-            } finally {
-                if (mounted) {
-                    setIsLoading(false);
-                }
+            if (!response.ok) {
+                setUser(null);
+                return;
             }
-        };
 
-        checkSession();
+            const data = await response.json();
 
-        return () => {
-            mounted = false;
-        };
+            setUser(data.user ?? null);
+        } catch (error) {
+            console.error("Auth session error:", error);
+            setUser(null);
+        } finally {
+            setIsLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        checkSession();
+    }, [checkSession]);
 
     return (
         <Authcontext.Provider
             value={{
                 user,
                 isLoading,
+                refreshUser: checkSession,
             }}
         >
             {children}

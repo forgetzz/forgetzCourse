@@ -135,7 +135,7 @@ export function SokidList() {
                   </p>
 
                   {/* Price */}
-                  <div
+                  {/* <div
                     className={cn(
                       "mb-6 text-4xl font-extrabold",
                       isExclusive
@@ -144,7 +144,7 @@ export function SokidList() {
                     )}
                   >
                     {pkg.price}
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Benefits */}

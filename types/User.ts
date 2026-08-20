@@ -10,4 +10,5 @@ export interface User {
   defi: boolean
   trade: boolean
   uid: string
+
 }

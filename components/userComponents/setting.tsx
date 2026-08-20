@@ -58,15 +58,19 @@ export default function ProfilePage() {
   }, []);
 
 
-  const handleLogout = async () => {
+const handleLogout = async () => {
     try {
-      await signOut(auth);
-      window.location.href = "/login";
-    } catch {
-      alert("Gagal logout");
-    }
-  };
+        await signOut(auth);
 
+        await fetch("/api/logout", {
+            method: "POST",
+        });
+
+        window.location.href = "/login";
+    } catch {
+        alert("Gagal logout");
+    }
+};
   const handleSave = async () => {
     const user = auth.currentUser;
     if (!user) return;

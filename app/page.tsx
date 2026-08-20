@@ -1,11 +1,11 @@
 "use client"
-import Footer from "@/components/footer";
-import HeroSection from "@/components/hero";
-import { SokidList } from "@/components/kemitraan"; // Assuming this is correct
-import Navbar from "@/components/navbar";
-import Pengguna from "@/components/pengguna";
+import Footer from "@/components/landing/footer";
+import HeroSection from "@/components/landing/hero";
+import { SokidList } from "@/components/landing/kemitraan"; // Assuming this is correct
+import Navbar from "@/components/landing/navbar";
+import Pengguna from "@/components/landing/pengguna";
 
-import SejarahKami from "@/components/sejarahKami";
+import SejarahKami from "@/components/landing/sejarahKami";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

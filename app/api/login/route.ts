@@ -83,11 +83,7 @@ export async function POST(request: NextRequest) {
             );
         }
         const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-        console.log({
-            exists: !!apiKey,
-            prefix: apiKey?.slice(0, 6),
-            length: apiKey?.length,
-        });
+
         const firebaseResponse = await fetch(
             `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
             {

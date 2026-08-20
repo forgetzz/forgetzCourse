@@ -12,6 +12,13 @@ export const vidHtml = defineType({
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
+    
+    defineField({
+      name: 'level',
+      title: 'Level',
+      type: 'number',
+      validation: (Rule) => Rule.required().min(1)
+    }),
 
     defineField({
       name: "description",
@@ -19,7 +26,7 @@ export const vidHtml = defineType({
       type: "text",
     }),
 
-    
+
 
     defineField({
       name: "videoUrl",

@@ -19,21 +19,11 @@ export default function LoginPage() {
   const [lihatPassword, setLihatPassword] = useState(false);
   const [captcha, setCaptcha] = useState<string>()
   const router = useRouter();
+  const { refreshUser } = useAuth();
+
   const handleLogin = async () => {
     setLoading(true);
     setError("");
-
-    if (!username || !password) {
-      setError("Username dan password harus diisi.");
-      setLoading(false);
-      return;
-    }
-
-    if (!captcha) {
-      setError("Error captcha");
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch("/api/login", {
@@ -54,7 +44,27 @@ export default function LoginPage() {
         throw new Error(data.error || "Login gagal.");
       }
 
+      // Pastikan session sudah terbaca
+      const sessionResponse = await fetch("/api/me", {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
 
+      if (!sessionResponse.ok) {
+        throw new Error("Session belum siap.");
+      }
+
+      const sessionData = await sessionResponse.json();
+
+      if (!sessionData.user) {
+        throw new Error("Session tidak valid.");
+      }
+
+      // Isi ulang AuthContext
+      await refreshUser();
+
+      // Baru masuk dashboard
       router.replace("/dashboard");
     } catch (err) {
       if (err instanceof Error) {
@@ -66,7 +76,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleLogin();
