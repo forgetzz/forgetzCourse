@@ -36,101 +36,37 @@ const handleLogin = async () => {
   }
 
   try {
-    // 1. Verifikasi CAPTCHA
-    const captchaRes = await fetch("/api/captcha", {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        username,
+        password,
         captcha,
       }),
     });
 
-    if (!captchaRes.ok) {
-      throw new Error("Gagal verifikasi captcha.");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Login gagal.");
     }
 
-    const captchaData = await captchaRes.json();
-
-    console.log("CAPTCHA:", captchaData);
-
-    if (!captchaData.success) {
-      throw new Error("Captcha gagal diverifikasi.");
-    }
-
-    // 2. Cari email berdasarkan username
-    const q = query(
-      collection(db, "users"),
-      where("username", "==", username)
-    );
-
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-      throw new Error("Username tidak ditemukan.");
-    }
-
-    const userData = snapshot.docs[0].data();
-
-    // 3. Login Firebase
-    const credential = await signInWithEmailAndPassword(
-      auth,
-      userData.email,
-      password
-    );
-
-    const idToken = await credential.user.getIdToken();
-
-console.log(idToken)
-    const sessionRes = await fetch("/api/session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idToken,
-      }),
-    });
-
-    if (!sessionRes.ok) {
-      throw new Error("Gagal membuat session.");
-    }
-
-    // 6. Session sudah dibuat
     alert("Berhasil");
 
     router.replace("/dashboard");
   } catch (err) {
-    let errorMessage = "Terjadi kesalahan saat login.";
-
-    if (err instanceof FirebaseError) {
-      switch (err.code) {
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-        case "auth/invalid-credential":
-          errorMessage = "Username atau password salah.";
-          break;
-
-        case "auth/invalid-email":
-          errorMessage = "Email tidak valid.";
-          break;
-
-        case "auth/too-many-requests":
-          errorMessage =
-            "Terlalu banyak percobaan. Coba lagi nanti.";
-          break;
-      }
-    } else if (err instanceof Error) {
-      errorMessage = err.message;
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError("Terjadi kesalahan saat login.");
     }
-
-    setError(errorMessage);
   } finally {
     setLoading(false);
   }
 };
-
 const { user, isLoading } = useAuth();
 useEffect(() => {
   if (!isLoading && user) {
