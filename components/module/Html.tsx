@@ -88,13 +88,22 @@ export default function HtmlModule() {
         getData();
     }, []);
 
-    if (profileLoading || moduleLoading) {
-        return (
-            <h1 className="flex min-h-screen items-center justify-center text-4xl">
-                LOADING DATA......
-            </h1>
-        );
-    }
+ if (profileLoading || moduleLoading) {
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+
+            <div className="text-center">
+                <h1 className="text-lg font-semibold tracking-tight">
+                    Loading data
+                </h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                    Please wait a moment...
+                </p>
+            </div>
+        </div>
+    );
+}
     return (
         <>
             {(profile?.levelAccount ?? 0) > 0 ? (

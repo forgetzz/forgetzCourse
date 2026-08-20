@@ -8,6 +8,7 @@ import { Star, TrendingUp, Layers, Award, ChevronRight, Code2 } from "lucide-rea
 import useTheme from "@/hooks/useTheme";
 import { Colors } from "@/utils/Colors";
 import { profileType } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
 
 const MAX_ACCOUNT = 3;
@@ -17,21 +18,35 @@ export default function Home2() {
   const { ThemeToggle, isDark } = useTheme()
 
   const Isdarkbg = isDark ? Colors.Primary_BG : Colors.Secondary_BG
+const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(getAuth(), async (user) => {
-      if (!user) return alert("login dulu");
-      try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (!snap.exists()) return alert("Data anda belum ada.");
-        setProfile(snap.data() as profileType);
-      } catch {
-        console.error("Kesalahan pada data anda");
-      }
-    });
-    return () => unsub();
-  }, []);
+useEffect(() => {
+    if (isLoading) return;
 
+    if (!user) {
+        alert("Login dulu");
+        return;
+    }
+
+    const getProfile = async () => {
+        try {
+            const snap = await getDoc(
+                doc(db, "users", user.uid)
+            );
+
+            if (!snap.exists()) {
+                alert("Data anda belum ada.");
+                return;
+            }
+
+            setProfile(snap.data() as profileType);
+        } catch (error) {
+            console.error("Kesalahan pada data anda:", error);
+        }
+    };
+
+    getProfile();
+}, [user, isLoading]);
   const levelAccount = Number(profile?.levelAccount ?? 0);
 
   return (

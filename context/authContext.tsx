@@ -1,59 +1,77 @@
-"use client"
-import { db } from '@/lib/firebase';
-import { AuthType, AuthTypeProvider} from '@/types/AuthContextType'
-import { User } from '@/types/User';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+"use client";
 
-import React, { createContext, useEffect, useState } from 'react'
+import { AuthType, AuthTypeProvider } from "@/types/AuthContextType";
+import { User } from "@/types/User";
+import React, {
+    createContext,
+    useEffect,
+    useState,
+} from "react";
 
+export const Authcontext =
+    createContext<AuthType | null>(null);
 
-export const Authcontext = createContext<AuthType | null>(null)
+export function AuthContextProvider({
+    children,
+}: AuthTypeProvider) {
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-export function AuthContextProvider({ children }: AuthTypeProvider) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        let mounted = true;
 
+        const checkSession = async () => {
+            try {
+                const response = await fetch("/api/me", {
+                    method: "GET",
+                    credentials: "include",
+                    cache: "no-store",
+                });
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
-      if (!user) {
-        return;
-      }
-        setIsLoading(true)
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+                if (!response.ok) {
+                    if (mounted) {
+                        setUser(null);
+                    }
 
-        if (!docSnap.exists()) {
-          console.log("Data user tidak ditemukan");
-          return;
-        }
+                    return;
+                }
 
-        const data = docSnap.data() as User;
-        console.log("DATA:", data)
-        setUser(data);
+                const data = await response.json();
 
-      } catch (error) {
-        console.error("Error:", error);
-      }finally{
-        setIsLoading(false)
-      }
-    });
+                if (mounted) {
+                    setUser(data.user);
+                }
+            } catch (error) {
+                console.error(
+                    "Auth session error:",
+                    error
+                );
 
-    return () => unsubscribe();
-  }, []);
+                if (mounted) {
+                    setUser(null);
+                }
+            } finally {
+                if (mounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
 
+        checkSession();
 
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
-  return (
-    <Authcontext.Provider value={{
-      user,
-      isLoading,
-    }}>
-      {children}
-    </Authcontext.Provider>
-
-  )
-
+    return (
+        <Authcontext.Provider
+            value={{
+                user,
+                isLoading,
+            }}
+        >
+            {children}
+        </Authcontext.Provider>
+    );
 }

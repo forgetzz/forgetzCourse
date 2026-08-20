@@ -19,60 +19,53 @@ export default function LoginPage() {
   const [lihatPassword, setLihatPassword] = useState(false);
   const [captcha, setCaptcha] = useState<string>()
   const router = useRouter();
-const handleLogin = async () => {
-  setLoading(true);
-  setError("");
+  const handleLogin = async () => {
+    setLoading(true);
+    setError("");
 
-  if (!username || !password) {
-    setError("Username dan password harus diisi.");
-    setLoading(false);
-    return;
-  }
-
-  if (!captcha) {
-    setError("Error captcha");
-    setLoading(false);
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-        captcha,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Login gagal.");
+    if (!username || !password) {
+      setError("Username dan password harus diisi.");
+      setLoading(false);
+      return;
     }
 
-    alert("Berhasil");
-
-    router.replace("/dashboard");
-  } catch (err) {
-    if (err instanceof Error) {
-      setError(err.message);
-    } else {
-      setError("Terjadi kesalahan saat login.");
+    if (!captcha) {
+      setError("Error captcha");
+      setLoading(false);
+      return;
     }
-  } finally {
-    setLoading(false);
-  }
-};
-const { user, isLoading } = useAuth();
-useEffect(() => {
-  if (!isLoading && user) {
-    router.replace("/dashboard");
-  }
-}, [user, isLoading]);
+
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          captcha,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login gagal.");
+      }
+
+
+      router.replace("/dashboard");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Terjadi kesalahan saat login.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
