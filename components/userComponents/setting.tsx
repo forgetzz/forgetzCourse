@@ -5,10 +5,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { Camera, Save, X, Pencil, LogOut, User, Link, Phone, Building2, CreditCard, Wallet } from "lucide-react";
 import { signOut } from "firebase/auth";
-
-const SUPABASE_PROJECT_URL = "https://yredbkgnngcgzfagnwah.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-const SUPABASE_BUCKET = "assets";
+import { useAuth } from "@/hooks/useAuth";
 
 interface UserData {
   name: string;
@@ -26,7 +23,7 @@ const FIELDS = [
   { label: "WhatsApp", key: "whatsapp", icon: Phone },
   { label: "Bank", key: "bank", icon: Building2 },
   { label: "No Rekening", key: "rekening", icon: CreditCard },
-  { label: "Alamat EVM", key: "addressEVM", icon: Wallet },
+
 ];
 
 function getInitials(name: string) {
@@ -45,10 +42,10 @@ export default function ProfilePage() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserData>(userData);
-
+  const { user } = useAuth()
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = auth.currentUser;
+
       if (!user) return;
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
@@ -60,40 +57,6 @@ export default function ProfilePage() {
     fetchUserData();
   }, []);
 
-  const uploadToSupabase = async (file: File): Promise<string | null> => {
-    const user = auth.currentUser;
-    if (!user) return null;
-    const fileName = `${user.uid}/${Date.now()}-${file.name}`;
-    const uploadUrl = `${SUPABASE_PROJECT_URL}/storage/v1/object/${SUPABASE_BUCKET}/${fileName}`;
-    try {
-      const res = await fetch(uploadUrl, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": file.type,
-          "x-upsert": "true",
-        },
-        body: file,
-      });
-      if (!res.ok) return null;
-      return `${SUPABASE_PROJECT_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${fileName}`;
-    } catch {
-      return null;
-    }
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = await uploadToSupabase(file);
-    if (!url) return alert("Upload gagal");
-    const user = auth.currentUser;
-    if (!user) return;
-    const updated = { ...userData, imageProfile: url };
-    await setDoc(doc(db, "users", user.uid), updated, { merge: true });
-    setUserData(updated);
-    setFormData(updated);
-  };
 
   const handleLogout = async () => {
     try {
@@ -147,8 +110,10 @@ export default function ProfilePage() {
 
       {/* Avatar */}
       <div className="flex flex-col items-center mb-7">
-        <div className="relative mb-3" style={{ padding: 3, borderRadius: "50%",
-          background: "linear-gradient(135deg, #4ade80, #166534)" }}>
+        <div className="relative mb-3" style={{
+          padding: 3, borderRadius: "50%",
+          background: "linear-gradient(135deg, #4ade80, #166534)"
+        }}>
           <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center"
             style={{ background: "#0a1f0e" }}>
             {userData.imageProfile ? (
@@ -166,8 +131,8 @@ export default function ProfilePage() {
           >
             <Camera size={12} color="#4ade80" />
           </button>
-          <input type="file" accept="image/*" ref={fileInputRef}
-            onChange={handleImageUpload} className="hidden" />
+          {/* <input type="file" accept="image/*" ref={fileInputRef}
+            onChange={handleImageUpload} className="hidden" /> */}
         </div>
 
         <h1 className="text-xl font-black mb-0.5" style={{ color: "#166534" }}>
@@ -187,13 +152,15 @@ export default function ProfilePage() {
 
         <div className="px-5 pt-5 pb-3">
           <p className="mb-4 flex items-center gap-2"
-            style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.18em",
-              color: "#166534", textTransform: "uppercase" }}>
+            style={{
+              fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: "0.18em",
+              color: "#166534", textTransform: "uppercase"
+            }}>
             informasi akun
             <span className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
           </p>
 
-  
+
 
           {/* Dynamic fields */}
           {FIELDS.map((field, i) => {
@@ -217,13 +184,17 @@ export default function ProfilePage() {
                     value={formData[field.key as keyof UserData]}
                     onChange={(e) => setFormData(prev => ({ ...prev, [field.key]: e.target.value }))}
                     className="flex-1 rounded-lg px-2.5 py-1.5 text-sm outline-none transition-all"
-                    style={{ background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.2)",
-                      color: "#166534", fontFamily: "'Syne', sans-serif" }}
+                    style={{
+                      background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.2)",
+                      color: "#166534", fontFamily: "'Syne', sans-serif"
+                    }}
                   />
                 ) : (
                   <span className="flex-1 font-bold break-all"
-                    style={{ fontSize: isEVM ? 11 : 13, color: isEVM ? "#166534" : "#166534",
-                      fontFamily: isEVM ? "'DM Mono', monospace" : "'Syne', sans-serif" }}>
+                    style={{
+                      fontSize: isEVM ? 11 : 13, color: isEVM ? "#166534" : "#166534",
+                      fontFamily: isEVM ? "'DM Mono', monospace" : "'Syne', sans-serif"
+                    }}>
                     {userData[field.key as keyof UserData] || "—"}
                   </span>
                 )}
@@ -237,8 +208,10 @@ export default function ProfilePage() {
       {isEditing ? (
         <div className="flex gap-3">
           <button onClick={handleSave} className="flex-1 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-            style={{ background: "linear-gradient(135deg, #166534, #15803d)",
-              border: "1px solid rgba(74,222,128,0.2)", color: "#dcfce7" }}>
+            style={{
+              background: "linear-gradient(135deg, #166534, #15803d)",
+              border: "1px solid rgba(74,222,128,0.2)", color: "#dcfce7"
+            }}>
             <Save size={15} /> Simpan
           </button>
           <button onClick={() => { setFormData(userData); setIsEditing(false); }}
