@@ -26,18 +26,18 @@ export async function POST(request: NextRequest) {
     // 1. VERIFIKASI CAPTCHA
     // ==========================================
 
-    const captchaResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/api/captcha`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          captcha,
-        }),
-      }
-    );
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+    const captchaResponse = await fetch(`${baseUrl}/api/captcha`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        captcha,
+      }),
+    });
 
     if (!captchaResponse.ok) {
       return NextResponse.json(
@@ -105,6 +105,8 @@ export async function POST(request: NextRequest) {
     const firebaseData = await firebaseResponse.json();
 
     if (!firebaseResponse.ok) {
+      console.error("Firebase Auth error:", firebaseData);
+
       return NextResponse.json(
         { error: "Username atau password salah." },
         { status: 401 }
@@ -112,6 +114,13 @@ export async function POST(request: NextRequest) {
     }
 
     const idToken = firebaseData.idToken;
+
+    if (!idToken) {
+      return NextResponse.json(
+        { error: "Firebase tidak mengembalikan ID token." },
+        { status: 500 }
+      );
+    }
 
     // ==========================================
     // 4. BUAT SESSION COOKIE
