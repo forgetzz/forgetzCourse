@@ -22,10 +22,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // ==========================================
-        // 1. VERIFIKASI CAPTCHA
-        // ==========================================
-
         const baseUrl =
             process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -55,10 +51,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // ==========================================
-        // 2. CARI USERNAME DI FIRESTORE
-        // ==========================================
-
+  
         const db = getFirestore();
 
         const snapshot = await db
@@ -119,10 +112,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // ==========================================
-        // 4. BUAT SESSION COOKIE
-        // ==========================================
-
+   
         const sessionCookie = await adminAuth.createSessionCookie(
             idToken,
             {
@@ -130,9 +120,6 @@ export async function POST(request: NextRequest) {
             }
         );
 
-        // ==========================================
-        // 5. SET COOKIE
-        // ==========================================
 
         const response = NextResponse.json({
             success: true,

@@ -39,7 +39,7 @@
     "react-turnstile": "^1.1.5",
     "sanity": "^5.31.1",
     "styled-components": "^6.5.3",
-    "tailwind-merge": "^3.3.1",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.6"
   },
@@ -56,9 +56,9 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  
-    "overrides": {
-      "jwks-rsa": { "jose": "4.15.9" }
+  "overrides": {
+    "jwks-rsa": {
+      "jose": "4.15.9"
     }
-  
+  }
 }
