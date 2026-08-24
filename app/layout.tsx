@@ -16,10 +16,72 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Forgetzstudio",
-  description: "belajar bersama",
+  title: {
+    default: "Forgetzstudio Learn",
+    template: "%s | Forgetzstudio Learn",
+  },
+
+  description:
+    "Forgetzstudio Learn adalah platform belajar programming dan teknologi untuk membantu kamu memahami coding dari dasar hingga membangun project nyata.",
+
+  keywords: [
+    "Forgetzstudio",
+    "Forgetzstudio Learn",
+    "belajar coding",
+    "belajar programming",
+    "belajar web development",
+    "belajar Next.js",
+    "belajar React",
+    "belajar TypeScript",
+  ],
+
+  authors: [
+    {
+      name: "Forgetzstudio",
+      url: "https://forgetzstudio.com",
+    },
+  ],
+
+  creator: "Forgetzstudio",
+
+  metadataBase: new URL("https://class.forgetzstudio.com"),
+
+  alternates: {
+    canonical: "/",
+  },
+
   icons: {
-    icon: "/images/forget.png", // atau /favicon.png
+    icon: "/images/forget.png",
+  },
+
+  openGraph: {
+    title: "Forgetzstudio Learn",
+    description:
+      "Belajar programming dan teknologi dengan materi yang praktis dan project nyata.",
+    url: "https://class.forgetzstudio.com",
+    siteName: "Forgetzstudio Learn",
+    type: "website",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Forgetzstudio Learn",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Forgetzstudio Learn",
+    description:
+      "Belajar programming dan teknologi dengan materi yang praktis dan project nyata.",
+    images: ["/images/og-image.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
