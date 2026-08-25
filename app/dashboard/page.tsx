@@ -37,6 +37,8 @@ export default function BottomNav() {
   const [openNested2, setOpenNested2] = useState(false)
   const [openNested3, setOpenNested3] = useState(false)
   const [openNested4, setOpenNested4] = useState(false)
+  const [openNested5, setOpenNested5] = useState(false)
+  
   const { user, isLoading } = useAuth()
   const [profile , setProfile] = useState<profileType>() 
 
@@ -171,24 +173,9 @@ useEffect(() => {
                       setOpen(false);
                     }}
                   >
-                    Html
+                    Html css js
                   </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("Html");
-                    }}
-                  >
-                  Css
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("Html");
-                    }}
-                  >
-                    Javascipt
-                  </button>
+                
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
@@ -235,7 +222,7 @@ useEffect(() => {
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
                     onClick={() => {
-                      setActiveTab("Html");
+                      setActiveTab("nextJs");
                       setOpen(false);
                     }}
                   >

@@ -2,8 +2,9 @@
 import Home2 from "@/components/userComponents/home";
 
 import ProfilePage from "@/components/userComponents/setting";
-import HtmlModule from "@/components/module/Html";
+import HtmlModule from "@/components/module/language/Html";
 import Payment from "@/components/userComponents/Payment";
+import NextModule from "@/components/module/framework/nextJs";
 
 
 
@@ -18,7 +19,7 @@ export const tabStrategies = {
 
 
   // FRAMEWORK
-  nextJs: <h1>SOON</h1>,
+  nextJs: <NextModule/>,
 
   // AI PAGE
   aiService: <h1> SOON</h1>,

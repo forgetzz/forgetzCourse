@@ -6,11 +6,10 @@ import {postType} from './postType'
 import {authorType} from './authorType'
 import { vidHtml } from './html/vidHtml'
 import { pdfHtml } from './html/pdfHtml'
-import { pdfJs } from './javascript/pdfJs'
-import { pdfCss } from './css/pdfCss'
-import { vidJs } from './javascript/pdfVid'
-import { vidCss } from './css/vidCss'
+import { vidNextjs } from './nextjs/vidNextjs'
+import { vidTypescript } from './typescript/vidTypescript'
+import { announcement } from './annoucement/annouce'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, postType, authorType , vidHtml, pdfHtml, pdfJs, vidJs, pdfCss,vidCss, ],
+  types: [blockContentType, categoryType, postType, authorType , vidHtml, pdfHtml, vidNextjs , vidTypescript, announcement],
 }

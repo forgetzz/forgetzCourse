@@ -8,44 +8,55 @@ import useTheme from "@/hooks/useTheme";
 import { Colors } from "@/utils/Colors";
 import { profileType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
+import Announcement from "../ui/annoucement";
 
 
 const MAX_ACCOUNT = 3;
-
+const announcementQuery = `*[
+  _type == "announcement" &&
+  active == true
+] | order(_createdAt desc)[0] {
+  _id,
+  title,
+  description,
+  buttonText,
+  link,
+  "imageUrl": image.asset->url
+}`;
 export default function Home2() {
   const [profile, setProfile] = useState<profileType>();
   const { ThemeToggle, isDark } = useTheme()
 
   const Isdarkbg = isDark ? Colors.Primary_BG : Colors.Secondary_BG
-const { user, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
 
-useEffect(() => {
+  useEffect(() => {
     if (isLoading) return;
 
     if (!user) {
-        alert("Login dulu");
-        return;
+      alert("Login dulu");
+      return;
     }
 
     const getProfile = async () => {
-        try {
-            const snap = await getDoc(
-                doc(db, "users", user.uid)
-            );
+      try {
+        const snap = await getDoc(
+          doc(db, "users", user.uid)
+        );
 
-            if (!snap.exists()) {
-                alert("Data anda belum ada.");
-                return;
-            }
-
-            setProfile(snap.data() as profileType);
-        } catch (error) {
-            console.error("Kesalahan pada data anda:", error);
+        if (!snap.exists()) {
+          alert("Data anda belum ada.");
+          return;
         }
+
+        setProfile(snap.data() as profileType);
+      } catch (error) {
+        console.error("Kesalahan pada data anda:", error);
+      }
     };
 
     getProfile();
-}, [user, isLoading]);
+  }, [user, isLoading]);
 
   const levelAccount = Number(profile?.levelAccount ?? 0);
 
@@ -106,18 +117,19 @@ useEffect(() => {
       </div>
 
       {/* Task Cards */}
-      <TaskCard
-        icon={<TrendingUp className="w-4 h-4 text-black" />}
-        title="Acount Level"
-        rating={levelAccount}
-        max={MAX_ACCOUNT}
-        color="#facc15"
-        accentBg="rgba(250,204,21,0.08)"
-        accentBorder="rgba(250,204,21,0.15)"
-      />
+   <TaskCard
+  icon={<TrendingUp className="w-4 h-4 text-black" />}
+  title="Acount Level"
+  rating={levelAccount}
+  max={MAX_ACCOUNT}
+  color="#facc15"
+  accentBg="rgba(250,204,21,0.08)"
+  accentBorder="rgba(250,204,21,0.15)"
+/>
 
-
-
+<div className="mt-10 md:mt-12">
+  <Announcement />
+</div>
     </div>
   );
 }

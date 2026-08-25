@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Module, {
     PdfType,
     VideoType,
-} from "../ui/module";
+} from "../../ui/module";
 
 import { client } from "@/sanity/lib/client";
 import { doc, getDoc, getDocs } from "firebase/firestore";

@@ -2,32 +2,32 @@
 
 import React, { useEffect, useState } from "react";
 
+
 import { client } from "@/sanity/lib/client";
 import { doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { User } from "lucide-react";
-import { getAuth } from "firebase/auth";
 import { profileType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
+import { cn } from "@/utils/utils";
 import Module, { PdfType, VideoType } from "@/components/ui/module";
 
 
 
-const pdfQuery = `*[_type == "pdfHtml"]{
+const pdfQuery = `*[_type == "pdfnextJs"] | order(_createdAt asc) {
   _id,
   title,
   description,
   "fileUrl": file.asset->url
 }`;
 
-const videoQuery = `*[_type == "vidHtml"]{
+const videoQuery = `*[_type == "Nextjs"] | order(_createdAt asc) {
   _id,
   title,
   description,
+  level,
   videoUrl
 }`;
-
-export default function CssModule() {
+export default function NextModule() {
     const [pdfs, setPdfs] = useState<PdfType[]>([]);
     const [videos, setVideos] = useState<VideoType[]>([]);
     const [profile, setProfile] = useState<profileType>();
@@ -102,7 +102,9 @@ export default function CssModule() {
         );
     }
     return (
-        <>
+        <div className={cn(
+            "mb-32"
+        )}>
             {(profile?.levelAccount ?? 0) > 0 ? (
                 <Module
                     pdfs={pdfs}
@@ -128,6 +130,6 @@ export default function CssModule() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
