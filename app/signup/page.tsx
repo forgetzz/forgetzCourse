@@ -8,6 +8,8 @@ import { registerType } from "@/types/register";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import Turnstile from "react-turnstile"
+import { SetAnalyticsUser, TrackEvent } from "@/lib/gtag";
+import { register } from "module";
 const BANKS = ["BCA", "BRI", "BNI", "Mandiri", "CIMB", "Danamon"];
 
 const fields: {
@@ -95,6 +97,12 @@ export default function MitraRegisterPage() {
         throw new Error("REGISTER_FAILED");
       }
 
+
+      SetAnalyticsUser(form.email)
+      TrackEvent("signup", {
+        method: "signup",
+        email: form.email
+      })
       setSuccess("Registrasi berhasil! Akun kamu sudah aktif.");
     } catch (error) {
       // Error teknis tetap terlihat di console untuk developer

@@ -4,16 +4,8 @@ import "./global.css";
 import GlobalLoading from "@/components/landing/loadingPage";
 import { AuthContextProvider } from "@/context/authContext";
 import { ThemeContextProvider } from "@/context/ThemeContext";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -90,10 +82,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const gaId = process.env.NEXT_PUBLIC_GA_ID as string 
+
   return (
     <html>
       <head>
-        {/* Favicon manual */}
+
         <link rel="icon" href="/images/loading.png" type="image/png" />
         <title>ForgetzStudio</title>
       </head>
@@ -104,6 +99,7 @@ export default function RootLayout({
           <ThemeContextProvider>
             <GlobalLoading />
             {children}
+      {gaId && <GoogleAnalytics gaId={gaId} />}
           </ThemeContextProvider>
         </AuthContextProvider>
       </body>

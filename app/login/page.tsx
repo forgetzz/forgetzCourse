@@ -11,6 +11,8 @@ import Link from "next/link";
 import { Eye, EyeOff, ArrowRight, Code2, AlertCircle } from "lucide-react";
 import Turnstile from "react-turnstile"
 import { useAuth } from "@/hooks/useAuth";
+import { SetAnalyticsUser, TrackEvent } from "@/lib/gtag";
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -64,6 +66,13 @@ export default function LoginPage() {
       // Isi ulang AuthContext
       await refreshUser();
 
+      //  userloginData 
+      SetAnalyticsUser(username);
+
+      TrackEvent("login", {
+        method: "email",
+        username: username,
+      });
       // Baru masuk dashboard
       router.replace("/dashboard");
     } catch (err) {
