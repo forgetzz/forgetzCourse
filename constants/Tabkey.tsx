@@ -5,6 +5,9 @@ import ProfilePage from "@/components/userComponents/setting";
 import HtmlModule from "@/components/module/language/Html";
 import Payment from "@/components/userComponents/Payment";
 import NextModule from "@/components/module/framework/nextJs";
+import TypescriptModule from "@/components/module/language/typescript";
+import SolidityModule from "@/components/module/language/solidity";
+import Soon from "@/components/ui/soon";
 
 
 
@@ -16,20 +19,21 @@ export const tabStrategies = {
 
   // LANGUAGE
   Html: <HtmlModule />,
+  Typescript: <TypescriptModule />,
+  Solidity: <SolidityModule />,
 
 
   // FRAMEWORK
-  nextJs: <NextModule/>,
+  nextJs: <NextModule />,
 
   // AI PAGE
-  aiService: <h1> SOON</h1>,
+  aiService: <Soon />,
 
   //  TOOLS
-  npm: <h1>SOON</h1>,
+  npm: <Soon />,
 
   // WEB3 
-
-  web3: <h1>SOON</h1>
+  web3: <Soon />
 
 
 } as const;

@@ -90,11 +90,11 @@ export default function Payment() {
         <div className="px-4 py-10">
             {/* Header */}
             <div className="mx-auto mb-10 max-w-3xl text-center">
-                <h1 className="text-4xl font-bold text-gray-900">
+                <h1 className="text-4xl font-bold">
                     Pilih Paket Belajar
                 </h1>
 
-                <p className="mt-3 text-gray-600">
+                <p className="mt-3">
                     Pilih paket yang sesuai dengan kebutuhan belajar kamu.
                 </p>
             </div>
@@ -112,7 +112,7 @@ export default function Payment() {
                         <div
                             key={pkg.packageName}
                             className={cn(
-                                "relative flex min-h-[650px] flex-col rounded-2xl border bg-white p-8 shadow-xl",
+                                "relative flex min-h-[650px] flex-col rounded-2xl border  p-8 shadow-xl",
                                 "transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl",
 
                                 isRecommended &&
@@ -164,11 +164,11 @@ export default function Payment() {
                             </div>
 
                             {/* Package */}
-                            <h2 className="text-3xl font-bold text-gray-900">
+                            <h2 className="text-3xl font-bold">
                                 {pkg.packageName}
                             </h2>
 
-                            <p className="mt-3 min-h-[50px] text-gray-600">
+                            <p className="mt-3 min-h-[50px] ">
                                 {pkg.description}
                             </p>
 
@@ -190,7 +190,7 @@ export default function Payment() {
                                 {pkg.benefits.map((benefit) => (
                                     <li
                                         key={benefit}
-                                        className="flex items-start gap-2 text-gray-700"
+                                        className="flex items-start gap-2 "
                                     >
                                         <CheckCircle
                                             className={cn(
@@ -222,7 +222,7 @@ export default function Payment() {
                                     "bg-green-600 hover:bg-green-500",
 
                                     isExclusive &&
-                                    "bg-yellow-400 text-black hover:bg-yellow-300",
+                                    "bg-yellow-400 hover:bg-yellow-300",
 
                                     !pkg.badge &&
                                     "bg-gray-900 hover:bg-gray-800"

@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./global.css";
@@ -5,6 +6,8 @@ import GlobalLoading from "@/components/landing/loadingPage";
 import { AuthContextProvider } from "@/context/authContext";
 import { ThemeContextProvider } from "@/context/ThemeContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
+
+import { cn } from "@/utils/utils";
 
 
 export const metadata: Metadata = {
@@ -83,7 +86,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const gaId = process.env.NEXT_PUBLIC_GA_ID as string 
+  const gaId = process.env.NEXT_PUBLIC_GA_ID as string
+
 
   return (
     <html>
@@ -93,13 +97,21 @@ export default function RootLayout({
         <title>ForgetzStudio</title>
       </head>
 
-      <body className="bg-base-100 text-base-content min-h-screen">
+      <body className={cn(
+        // root style
+        "bg-base-100 text-base-content min-h-screen",
+        //  theme global
+
+      )}>
+
 
         <AuthContextProvider>
           <ThemeContextProvider>
-            <GlobalLoading />
-            {children}
-      {gaId && <GoogleAnalytics gaId={gaId} />}
+        
+              <GlobalLoading />
+              {children}
+              {gaId && <GoogleAnalytics gaId={gaId} />}
+        
           </ThemeContextProvider>
         </AuthContextProvider>
       </body>

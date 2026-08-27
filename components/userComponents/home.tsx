@@ -9,6 +9,7 @@ import { Colors } from "@/utils/Colors";
 import { profileType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import Announcement from "../ui/annoucement";
+import { Firebase } from "@/utils/firebase";
 
 
 const MAX_ACCOUNT = 3;
@@ -37,25 +38,20 @@ export default function Home2() {
       alert("Login dulu");
       return;
     }
-
-    const getProfile = async () => {
-      try {
-        const snap = await getDoc(
-          doc(db, "users", user.uid)
-        );
-
-        if (!snap.exists()) {
-          alert("Data anda belum ada.");
-          return;
-        }
-
-        setProfile(snap.data() as profileType);
-      } catch (error) {
-        console.error("Kesalahan pada data anda:", error);
+    const usersData = async () => {
+      const fbs = new Firebase()
+      const result = await fbs.getUser<profileType>(db, "users", user.uid)
+      if(!result) {
+        throw new Error("Data belum siap")
       }
-    };
+       setProfile(result)
+    }
+   
 
-    getProfile();
+    usersData()
+
+
+
   }, [user, isLoading]);
 
   const levelAccount = Number(profile?.levelAccount ?? 0);
@@ -68,8 +64,8 @@ export default function Home2() {
       {/* Welcome Header */}
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-gray-600 uppercase tracking-widest mb-1">Dashboard</p>
-          <h1 className="text-2xl md:text-3xl font-black text-black leading-tight">
+          <p className="text-xs uppercase tracking-widest mb-1">Dashboard</p>
+          <h1 className="text-2xl md:text-3xl font-black leading-tight">
             Selamat Datang,{" "}
             <span
               style={{
@@ -82,7 +78,7 @@ export default function Home2() {
               {profile?.name ?? "—"}
             </span>
           </h1>
-          <p className="text-sm text-gray-600 mt-1">Pantau progres belajar dan pencapaianmu.</p>
+          <p className="text-sm mt-1">Pantau progres belajar dan pencapaianmu.</p>
         </div>
 
         {/* Avatar */}
@@ -117,19 +113,19 @@ export default function Home2() {
       </div>
 
       {/* Task Cards */}
-   <TaskCard
-  icon={<TrendingUp className="w-4 h-4 text-black" />}
-  title="Acount Level"
-  rating={levelAccount}
-  max={MAX_ACCOUNT}
-  color="#facc15"
-  accentBg="rgba(250,204,21,0.08)"
-  accentBorder="rgba(250,204,21,0.15)"
-/>
+      <TaskCard
+        icon={<TrendingUp className="w-4 h-4 " />}
+        title="Acount Level"
+        rating={levelAccount}
+        max={MAX_ACCOUNT}
+        color="#facc15"
+        accentBg="rgba(250,204,21,0.08)"
+        accentBorder="rgba(250,204,21,0.15)"
+      />
 
-<div className="mt-10 md:mt-12">
-  <Announcement />
-</div>
+      <div className="mt-10 md:mt-12">
+        <Announcement />
+      </div>
     </div>
   );
 }
@@ -179,11 +175,11 @@ function TaskCard({
             >
               {icon}
             </div>
-            <span className="text-base font-bold text-black" style={{ fontFamily: "'Syne', sans-serif" }}>
+            <span className="text-base font-bold " style={{ fontFamily: "'Syne', sans-serif" }}>
               {title}
             </span>
           </div>
-          <span className="text-xs text-gray-600 font-medium px-2 py-1 rounded-full"
+          <span className="text-xs  font-medium px-2 py-1 rounded-full"
             style={{ background: "rgba(255,255,255,0.05)" }}>
             {filled}/{max} Level Account
           </span>
@@ -206,7 +202,7 @@ function TaskCard({
             style={{ width: `${(filled / max) * 100}%`, background: color }}
           />
         </div>
-        <p className="mt-1 text-xs text-gray-700">
+        <p className="mt-1 text-xs ">
           {filled === 1
             ? "Account Beginner"
             : filled === 2

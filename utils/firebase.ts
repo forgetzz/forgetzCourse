@@ -2,22 +2,25 @@
 import { doc, DocumentData, Firestore, getDoc, getDocs, collection, WhereFilterOp, query, where } from "firebase/firestore"
 
 
-export class Firebase {
+export class Firebase  {
 
+   
     async getUser<T extends DocumentData>(
         db: Firestore,
         collection: string,
         userUid: string
-    ): Promise<T | null> {
+    ): Promise<T> {
 
         const dbRef = await getDoc(doc(db, collection, userUid))
         if (!dbRef.exists()) {
             throw new Error(" YAHH KASIAN ERRORRR HAHAHAHAHAHHA")
         }
-
+       
         const result = dbRef.data() as T
         return result
     }
+
+
 
 
 
@@ -38,7 +41,7 @@ export class Firebase {
     }
 
 
-    async getUserWhere< T extends object , K extends keyof T>(
+    async getUserWhere<T extends object, K extends keyof T>(
         db: Firestore,
         collectionName: string,
         field: K,
@@ -69,4 +72,6 @@ export class Firebase {
 
 
 }
+ 
+
 

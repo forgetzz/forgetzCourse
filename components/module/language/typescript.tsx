@@ -10,10 +10,11 @@ import { profileType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/utils/utils";
 import Module, { PdfType, VideoType } from "@/components/ui/module";
+import { Firebase } from "@/utils/firebase";
 
 
 
-const pdfQuery = `*[_type == "pdfnextJs"] | order(_createdAt asc) {
+const pdfQuery = `*[_type == "pdfTs"] | order(_createdAt asc) {
   _id,
   title,
   description,
@@ -33,29 +34,23 @@ export default function TypescriptModule() {
     const [profile, setProfile] = useState<profileType>();
     const [profileLoading, setProfileLoading] = useState(true);
     const [moduleLoading, setModuleLoading] = useState(true);
-    const user = useAuth()
-    const userId = user.user?.uid
+    const { user, isLoading } = useAuth()
+
 
     useEffect(() => {
-        if (!userId) {
+        if (!user) {
             setProfileLoading(false);
             return;
         }
 
         const getUser = async () => {
             try {
-                const dbRef = await getDoc(
-                    doc(db, "users", userId)
-                );
 
-                if (!dbRef.exists()) {
-                    return;
-                }
-
-                const response = dbRef.data() as profileType;
-
-                setProfile(response);
-            } catch (error) {
+                const fbs = new Firebase()
+                const result = await fbs.getUser<profileType>(db, "users", user.uid)
+                setProfile(result)
+            }
+            catch (error) {
                 console.error("Gagal mengambil profile:", error);
             } finally {
                 setProfileLoading(false);
@@ -63,7 +58,7 @@ export default function TypescriptModule() {
         };
 
         getUser();
-    }, [userId]);
+    }, [user]);
 
     useEffect(() => {
         async function getData() {
@@ -87,7 +82,7 @@ export default function TypescriptModule() {
 
     if (profileLoading || moduleLoading) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+            <div className="flex min-h-screen flex-col items-center justify-center gap-4 ">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
 
                 <div className="text-center">

@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Module, {
-    PdfType,
-    VideoType,
-} from "../../ui/module";
+
 
 import { client } from "@/sanity/lib/client";
 import { doc, getDoc, getDocs } from "firebase/firestore";
@@ -12,52 +9,48 @@ import { db } from "@/lib/firebase";
 import { profileType } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/utils/utils";
+import Module, { PdfType, VideoType } from "@/components/ui/module";
+import { Firebase } from "@/utils/firebase";
 
 
 
-const pdfQuery = `*[_type == "pdfHtml"] | order(_createdAt asc) {
+const pdfQuery = `*[_type == "pdfSol"] | order(_createdAt asc) {
   _id,
   title,
   description,
   "fileUrl": file.asset->url
 }`;
 
-const videoQuery = `*[_type == "vidHtml"] | order(_createdAt asc) {
+const videoQuery = `*[_type == "vidSol"] | order(_createdAt asc) {
   _id,
   title,
   description,
+  level,
   videoUrl
 }`;
-
-export default function HtmlModule() {
+export default function SolidityModule() {
     const [pdfs, setPdfs] = useState<PdfType[]>([]);
     const [videos, setVideos] = useState<VideoType[]>([]);
     const [profile, setProfile] = useState<profileType>();
     const [profileLoading, setProfileLoading] = useState(true);
     const [moduleLoading, setModuleLoading] = useState(true);
-    const user = useAuth()
-    const userId = user.user?.uid
+    const { user, isLoading } = useAuth()
+
 
     useEffect(() => {
-        if (!userId) {
+        if (!user) {
             setProfileLoading(false);
             return;
         }
 
         const getUser = async () => {
             try {
-                const dbRef = await getDoc(
-                    doc(db, "users", userId)
-                );
 
-                if (!dbRef.exists()) {
-                    return;
-                }
-
-                const response = dbRef.data() as profileType;
-
-                setProfile(response);
-            } catch (error) {
+                const fbs = new Firebase()
+                const result = await fbs.getUser<profileType>(db, "users", user.uid)
+                setProfile(result)
+            }
+            catch (error) {
                 console.error("Gagal mengambil profile:", error);
             } finally {
                 setProfileLoading(false);
@@ -65,7 +58,7 @@ export default function HtmlModule() {
         };
 
         getUser();
-    }, [userId]);
+    }, [user]);
 
     useEffect(() => {
         async function getData() {

@@ -4,8 +4,13 @@ export type AnalyticsEvent =
   | "video_course"
   | "signup"
   | "login"
+  | "video_start"
+  | "pdf_read"
   | "purchase"
-  | "logout";
+  | "video_progress"
+  | "logout"
+  | "video_completed"
+  | "align_button";
 
 export function TrackEvent(
   eventName: AnalyticsEvent,

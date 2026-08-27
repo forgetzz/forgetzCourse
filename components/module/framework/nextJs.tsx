@@ -87,7 +87,7 @@ export default function NextModule() {
 
     if (profileLoading || moduleLoading) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+            <div className="flex min-h-screen flex-col items-center justify-center gap-4 ">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
 
                 <div className="text-center">
