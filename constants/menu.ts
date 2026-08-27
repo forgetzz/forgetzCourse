@@ -23,7 +23,7 @@ export const menuGroups: menuType[] = [
     },
     {
         id: "Framework",
-        label: "Framewoek",
+        label: "Framework",
         icon: FrameIcon,
         items: [
             { label: "Next Js", tab: "nextJs" },

@@ -98,7 +98,7 @@ export default function BottomNav() {
     <div className={cn(
       // mix Styles
       "flex flex-col min-h-fit",
- 
+
       theme
     )}>
       <div className={cn(
@@ -122,20 +122,27 @@ export default function BottomNav() {
           )}
         </div>
 
+        <div className="flex items-center">
+          <button
+            onClick={ThemeToggle}
+            className={cn(
+              "group flex items-center gap-2",
+              "px-1 py-1",
+              "text-sm font-medium",
+              " ",
+              "transition-colors duration-300"
+            )}
+          >
+            <span
+              key={isDark ? "dark" : "light"}
+              className="animate-in spin-in-90 zoom-in-75 duration-300"
+            >
+              {isDark ? <Sun size={19} /> : <Moon size={19} />}
+            </span>
 
-        <div className="flex items-center gap-3">
-          <button onClick={ThemeToggle}>
-            {isDark ? <div className={cn(
-              // display
-              "flex justify-center items-center",
-              // gap
-              "gap-30 px-1"
-            )}><Sun size={20} className="mr-2" />  light</div> : <div className={cn(
-              // display
-              "flex justify-center items-center",
-              // gap
-              "gap-30 px-1"
-            )}><Moon size={20} className="mr-2" />  Dark</div>}
+            <span className="transition-all duration-300">
+              {isDark ? "Light" : "Dark"}
+            </span>
           </button>
         </div>
 

@@ -154,3 +154,111 @@ body {
 
 
 
+
+
+
+
+
+.home-enter {
+  animation: homeEnter 500ms ease-out both;
+}
+
+.home-item {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: homeItemEnter 500ms ease-out forwards;
+}
+
+.home-item-1 {
+  animation-delay: 100ms;
+}
+
+.home-item-2 {
+  animation-delay: 180ms;
+}
+
+.home-item-3 {
+  animation-delay: 260ms;
+}
+
+.home-item-4 {
+  animation-delay: 360ms;
+}
+
+@keyframes homeEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes homeItemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-card-hover {
+  transition:
+    transform 250ms ease,
+    border-color 250ms ease;
+}
+
+.task-card-hover:hover {
+  transform: translateY(-2px);
+}
+
+.star-filled {
+  animation: starPop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes starPop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-20deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.progress-fill {
+  transform-origin: left;
+  animation: progressEnter 800ms ease-out 450ms both;
+}
+
+@keyframes progressEnter {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-enter,
+  .home-item,
+  .star-filled,
+  .progress-fill {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .task-card-hover {
+    transition: none;
+  }
+}
